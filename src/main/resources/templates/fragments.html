@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<nav th:fragment="nav" class="navbar navbar-expand-lg navbar-light bg-primary border-bottom">
+		<div class="container">
+			<a class="navbar-brand fw-bold" th:href="@{/}">Boundless Books</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks"><span
+					class="navbar-toggler-icon"></span></button>
+			<div id="navLinks" class="collapse navbar-collapse">
+				<ul class="navbar-nav ms-auto align-items-lg-center">
+					<li class="nav-item"><a class="nav-link" th:href="@{/}">Browse</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/about}">About</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>
+					<li class="nav-item" th:if="${#authorization.expression('isAnonymous()')}"><a class="nav-link"
+							th:href="@{/login}">Login</a></li>
+					<li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}"><a class="nav-link"
+							th:href="@{/profile}">Profile</a></li>
+					<li class="nav-item ms-lg-2" th:if="${#authorization.expression('isAuthenticated()')}">
+						<form th:action="@{/logout}" method="post"><button class="btn btn-sm btn-outline-light">Log
+								out</button></form>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<footer th:fragment="footer" class="py-4 mt-5">
+		<div class="container text-center text-muted">© 2026 Boundless Books · For readers, by readers.</div>
+	</footer>
+</body>
+
+</html>
