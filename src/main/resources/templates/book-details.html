@@ -11,64 +11,100 @@
 
 <body>
 	<div th:replace="~{fragments :: nav}"></div>
-	<main class="container py-5"><a class="back-link" th:href="@{/}">← Back to browse</a>
+
+	<main class="container py-5">
+		<a class="back-link" th:href="@{/}">← Back to browse</a>
+
 		<section class="details-card mt-3">
 			<div class="row g-5">
-				<div class="col-md-4 text-center"><img class="details-cover" th:src="${book.coverImage}"
-						th:alt="${book.title}"></div>
-				<div class="col-md-8"><span class="genre" th:text="${book.genre}"></span>
+				<div class="col-md-4 text-center">
+					<img class="details-cover" th:src="${book.coverImage}" th:alt="${book.title}">
+				</div>
+
+				<div class="col-md-8">
+					<span class="genre" th:text="${book.genre}"></span>
 					<h1 th:text="${book.title}"></h1>
 					<p class="h5 text-muted" th:text="'by ' + ${book.author}"></p>
+
 					<div class="stars fs-5 my-3"
 						th:text="${book.averageRating > 0 ? #numbers.formatDecimal(book.averageRating,1,1) + ' out of 5 stars' : 'No ratings yet'}">
 					</div>
+
 					<p class="lead" th:text="${book.description}"></p>
+
 					<dl class="row book-facts">
 						<dt class="col-sm-4">ISBN</dt>
 						<dd class="col-sm-8" th:text="${book.isbn}"></dd>
+
 						<dt class="col-sm-4">Publication date</dt>
-						<dd class="col-sm-8" th:text="${#temporals.format(book.publicationDate,'MMMM d, yyyy')}"></dd>
+						<dd class="col-sm-8"
+							th:text="${#temporals.format(book.publicationDate,'MMMM d, yyyy')}"></dd>
 					</dl>
 				</div>
 			</div>
 		</section>
-		<div class="alert alert-success mt-4" th:if="${param.reviewed}">Thank you—your review was added.</div>
+
+		<div class="alert alert-success mt-4" th:if="${param.reviewed}">
+			Thank you—your review was added.
+		</div>
+
 		<div class="row g-4 mt-2">
 			<section class="col-lg-7">
 				<h2>Reader reviews</h2>
-				<div class="empty-reviews" th:if="${#lists.isEmpty(book.reviews)}">Be the first person to review this
-					book.</div>
+
+				<div class="empty-reviews" th:if="${#lists.isEmpty(book.reviews)}">
+					Be the first person to review this book.
+				</div>
+
 				<article class="review-card" th:each="item : ${book.reviews}">
-					<div class="d-flex justify-content-between"><strong th:text="${item.user.username}"></strong><span
-							class="stars" th:text="${item.rating + ' ★'}"></span></div>
-					<p th:text="${item.reviewText}"></p><small
-						th:text="${#temporals.format(item.reviewDate,'MMM d, yyyy')}"></small>
+					<div class="d-flex justify-contentShorten-between">
+						<strong th:text="${item.user.username}"></strong>
+						<span class="stars" th:text="${item.rating + ' ★'}"></span>
+					</div>
+
+					<p th:text="${item.reviewText}"></p>
+					<small th:text="${#temporals.format(item.reviewDate,'MMM d, yyyy')}"></small>
 				</article>
 			</section>
+
 			<aside class="col-lg-5">
 				<div class="review-form">
 					<h2>Leave a review</h2>
+
 					<div th:if="${#authorization.expression('isAnonymous()')}">
-						<p>Please log in to share your rating.</p><a class="btn btn-primary" th:href="@{/login}">Log in
-							to review</a>
+						<p>Please log in to share your rating.</p>
+						<a class="btn btn-primary" th:href="@{/login}">Log in to review</a>
 					</div>
+
 					<form th:if="${#authorization.expression('isAuthenticated()')}"
-						th:action="@{/books/{id}/reviews(id=${book.id})}" th:object="${review}" method="post"><label
-							class="form-label">Rating</label><select class="form-select mb-3" th:field="*{rating}">
+						th:action="@{/books/{bookId}/reviews(bookId=${book.id})}"
+						th:object="${review}"
+						method="post">
+
+						<label class="form-label">Rating</label>
+						<select class="form-select mb-3" th:field="*{rating}">
 							<option value="5">5 - Excellent</option>
 							<option value="4">4 - Very good</option>
 							<option value="3">3 - Good</option>
 							<option value="2">2 - Fair</option>
 							<option value="1">1 - Poor</option>
-						</select><label class="form-label">Your review</label><textarea class="form-control mb-3"
-							rows="5" th:field="*{reviewText}" placeholder="What did you think?"></textarea>
-						<div class="text-danger mb-2" th:errors="*{reviewText}"></div><button
-							class="btn btn-primary w-100">Submit Review</button>
+						</select>
+
+						<label class="form-label">Your review</label>
+						<textarea class="form-control mb-3"
+							rows="5"
+							th:field="*{reviewText}"
+							placeholder="What did you think?"></textarea>
+
+						<div class="text-danger mb-2" th:errors="*{reviewText}"></div>
+
+						<button class="btn btn-primary w-100">Submit Review</button>
 					</form>
 				</div>
 			</aside>
 		</div>
 	</main>
+
 	<div th:replace="~{fragments :: footer}"></div>
 </body>
 

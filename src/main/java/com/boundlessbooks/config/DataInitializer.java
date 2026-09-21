@@ -7,8 +7,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 
+/**
+ * Adds the starter books when the database is empty.
+ */
 @Configuration
 public class DataInitializer {
+	/**
+	 * Creates a task that loads the sample book records at startup.
+	 *
+	 * @param books repository used to save and count books
+	 * @return startup task for loading the sample data
+	 */
 	@Bean
 	CommandLineRunner seedBooks(BookRepository books) {
 		return args -> {
@@ -26,6 +35,7 @@ public class DataInitializer {
 		};
 	}
 
+	/** Creates a book object from the supplied values. */
 	private Book make(String title, String author, String genre, String isbn, String description, LocalDate date,
 			String image) {
 		Book b = new Book();

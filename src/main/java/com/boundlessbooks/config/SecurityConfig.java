@@ -8,13 +8,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Defines password handling, login behavior, and page access rules.
+ */
 @Configuration
 public class SecurityConfig {
+	/**
+	 * Creates the encoder used to safely store passwords.
+	 *
+	 * @return BCrypt password encoder
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
+	/**
+	 * Connects the user service and password encoder to Spring Security.
+	 *
+	 * @param service service that loads user accounts
+	 * @param encoder encoder used to check passwords
+	 * @return configured authentication provider
+	 */
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider(UserService service, PasswordEncoder encoder) {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(service);
@@ -22,6 +37,14 @@ public class SecurityConfig {
 		return provider;
 	}
 
+	/**
+	 * Sets which pages are public and configures login and logout.
+	 *
+	 * @param http security settings for web requests
+	 * @param provider authentication provider for application users
+	 * @return configured security filter chain
+	 * @throws Exception if the security settings cannot be built
+	 */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http, DaoAuthenticationProvider provider)
 			throws Exception {
